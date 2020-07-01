@@ -164,17 +164,14 @@ function regen(alg=1) {
   }
   console.log('(got minp & histogram thing)')
   let sum = 0
-  let tmp = -1
   Object.keys(f).forEach(i => {
-    sum += f[i]
+    sum += Math.log(f[i])
     f[i] = sum
-    tmp = i
   })
   // now f[i] gives the cumulative number of pixels with tally <= i
   console.log(`
 minp = ${minp}
 maxp = ${maxp}
-last key = ${tmp}
 sum = ${sum}
 f[maxp] = ${f[maxp]}`)
 //${JSON.stringify(Object.keys(f))}`)
