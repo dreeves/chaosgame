@@ -51,8 +51,9 @@ function commafy(x) {
 // Blink (blue-to-pink) returns a hue number -- blue if x is 0 up to pink if 1
 function blink(x) { return mod(-.83*x+.67, 1) }
 
-// Take the tally for a pixel and return its hue number (0 to 1)
-function tallywrap(n) { return blink(n%1000/1000) }
+// Take the tally for a pixel and the max tally for any pixel, and return its
+// hue number (0 to 1).
+function tallyhue(n, maxp) { return blink(n/maxp) }
 
 // Make mod work the mathy way for negative numbers
 function mod(x, m) { return (x % m + m) % m }
