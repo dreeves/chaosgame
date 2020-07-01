@@ -7,7 +7,7 @@ fullscreen, background, stroke, color, fill, text, noFill, keyCode, textSize,
 push, pop, translate, rotate, frameCount, 
 clip, range, randrange, midpoint, randelem, randreal, 
 apl, mod, argmin, transpose, uniquify, renorm, spinpick, sortby, digs, commafy, 
-fracify, getQueryParam, rage, blink, tallywrap, 
+fracify, getQueryParam, rage, blink, tallyhue, 
 */
 
 new p5() // including this lets you use p5's globals everywhere
@@ -105,6 +105,7 @@ function cart(theta) { return coort(Math.cos(theta), Math.sin(theta)) }
 
 // Generate a list of points spread out on a big circle
 function genattractors(n) {
+  //return [coort(1,1), coort(-1,1), coort(-1,-1), coort(1,-1), coort(0,0)]
   if      (n===3)  return [coort(-1,-1), coort(1,-1), coort(0, Math.sqrt(3)-1)] 
   else if (n===4)  return [coort(1,1), coort(-1,1), coort(-1,-1), coort(1,-1)]
   else if (n%2==0) return range(n).map(i => cart(i*TAU/n))
@@ -117,7 +118,7 @@ function plotxy(x, y) {
   grid[x][y] += 1
   const n = grid[x][y]
   if (n > maxp) maxp = n
-  stroke(tallywrap(n), 1, 1)
+  stroke(tallyhue(n, maxp), 1, 1)
   tot += 1
   xcom = (tot-1)/tot*xcom + x/tot // update the center of mass
   ycom = (tot-1)/tot*ycom + y/tot
@@ -146,6 +147,62 @@ function playrandnote() {
   osc.freq(midiToFreq(randrange(50, 110)))
 }
 
+// Re-plot all the points in the grid, recomputing the colors
+function regen(alg=1) {
+  console.log('start regenerating')
+  let minp = maxp
+  let n
+  let f = {} // f[i] initially gives the number of pixels with tally i
+  for (let i = 0; i < width; i++) {
+    for (let j = 0; j < height; j++) {
+      n = grid[i][j]
+      if (n>0) {  // if this pixel has tally 0 then just ignore it
+        if (f[n]===undefined) { f[n] = 1 } else { f[n]++ } 
+        if (n<minp) minp = n    
+      }
+    }
+  }
+  console.log('(got minp & histogram thing)')
+  let sum = 0
+  let tmp = -1
+  Object.keys(f).forEach(i => {
+    sum += f[i]
+    f[i] = sum
+    tmp = i
+  })
+  // now f[i] gives the cumulative number of pixels with tally <= i
+  console.log(`
+minp = ${minp}
+maxp = ${maxp}
+last key = ${tmp}
+sum = ${sum}
+f[maxp] = ${f[maxp]}`)
+//${JSON.stringify(Object.keys(f))}`)
+  const a = f[minp]
+  Object.keys(f).forEach(i => {
+    f[i] = (f[i]-a)/(sum-a)
+  })
+  // now f[minp] is 0 and f[maxp] is 1
+  console.log(`f[minp] = ${f[minp]} (should be 0)\n` +
+              `f[maxp] = ${f[maxp]} (should be 1)`)
+  for (let i = 0; i < width; i++)
+    for (let j = 0; j < height; j++) {
+      n = grid[i][j]
+      if (n > 0) {
+        if (alg===1) {
+          stroke(blink((n-minp)/(maxp-minp)), 1, 1)
+        } else if (alg===2) {
+          stroke(blink(f[n]), 1, 1)
+        } else {
+          stroke('White')
+        }
+        if (n > 0) point(i,j)  
+      }
+  }
+  console.log('done regenerating')
+}
+
+
 // -----------------------------------------------------------------------------
 // Special p5.js functions -----------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -158,11 +215,11 @@ function draw() {
   rect(0, height-infoht*2-3, textWidth(maxline)+3, infoht+2)
   rect(0, height-infoht,     textWidth(totline)+3, infoht+2)
   maxline = `max  ${commafy(maxp)}`
-  totline = `tot: ${commafy(tot)}`
+  totline = `total: ${commafy(tot)}`
   stroke('Black'); fill('White')
-  text(`max  ${commafy(maxp)}`, 3, height - infoht - 3*2)
-  text(`tot: ${commafy(tot)}`, 3, height-3)  
-  stroke('Black'); fill(tallywrap(maxp), 1, 1)
+  text(maxline, 3, height - infoht - 3*2)
+  text(totline, 3, height-3)  
+  stroke('Black'); fill(tallyhue(maxp%1000, 1000), 1, 1)
   text(':', 60, height - infoht - 3*2)
   stroke('Yellow'); fill('Yellow') // for drawing with the mouse
   if (tot % 1e7 === 0) {
@@ -210,24 +267,12 @@ function keyPressed() {
     const newcac = randrange(0, newnoa-2)
     const newpat = Math.round(pat*12) // same pat, but just need the numerator
     rage(`/?noa=${newnoa}&cac=${newcac}&pat=${newpat}&chunk=${chunk}`)
-  } else if (keyCode === 71) { // g
-    console.log('start plotting')
-    let minp = maxp
-    let n
-    for (let i = 0; i < width; i++)
-      for (let j = 0; j < height; j++) {
-        n = grid[i][j]
-        if (n>0 && n<minp) minp = n
-      }
-    console.log('(got minp)')
-    for (let i = 0; i < width; i++)
-      for (let j = 0; j < height; j++) {
-        n = grid[i][j]
-        stroke(blink((n-minp)/(maxp-minp)), 1, 1)
-        if (n > 0) point(i,j)
-    }
-    console.log('stop plotting')
-
+  } else if (keyCode === 49 || keyCode === 71) { // 1
+    regen(1)
+  } else if (keyCode === 50) { // 2
+    regen(2)
+  } else if (keyCode === 51) { // 3
+    regen(3)
   }
   return false
 }
