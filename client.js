@@ -66,11 +66,13 @@ const nom = [
 //https://chaosgame.glitch.me/?noa=11&hub=0&cac=2&pat=8 -- dumbo
 //https://chaosgame.glitch.me/?noa=6&hub=0&cac=0&pat=8 -- kochflake
 //https://chaosgame.glitch.me/?noa=6&hub=1&cac=0&pat=6 -- pentafluff
-//https://chaosgame.glitch.me/?noa=8&hub=1&cac=0&pat=8 -- flowerpower or daisychain
+//https://chaosgame.glitch.me/?noa=8&hub=1&cac=0&pat=8 -- flowerpower/daisychain
 //https://chaosgame.glitch.me/?noa=7&hub=1&cac=0&pat=8 -- snowflower
 //https://chaosgame.glitch.me/?noa=4&hub=0&cac=1&pat=5 -- carpet
 //https://chaosgame.glitch.me/?noa=9&hub=1&cac=0&pat=8 -- wheel
 //https://chaosgame.glitch.me/?noa=4&hub=1&cac=0&pat=6 -- sierpinski dribble
+//https://chaosgame.glitch.me/?noa=7&hub=0&cac=0&pat=6 -- colorful
+//https://chaosgame.glitch.me/?noa=8&hub=1&cac=0&pat=7 -- doily
 // -----------------------------------------------------------------------------
 // REJECT PILE:
 // 6, 4, 1/2  -- molecule
@@ -287,6 +289,7 @@ function draw() {
           if      (calg === 0) { stroke(1, 0, .3) } 
           else if (calg === 1) { stroke(blink((n-minp)/(maxp-minp)), 1, 1) }
           else if (calg <= 8)  { stroke(blink(tah[n]), 1, 1) }
+          else                 { stroke(1, 0, .1) }
           point(rx, ry)
         }
       }
