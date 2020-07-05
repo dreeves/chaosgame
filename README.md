@@ -39,8 +39,11 @@ Cantor Soule-Reeves and Daniel Reeves
 // 9, 3, 1/2  -- fire breathing lizards
 // 8, 2, 7/12 -- gearflake
 // 12, 3, 2/3 -- ragdolls
-https://chaosgame.glitch.me/?noa=11&cac=2&pat=8&chunk=5000 -- dumbo
-https://chaosgame.glitch.me/?noa=6&cac=0&pat=8&chunk=100000 -- kochflake
+https://chaosgame.glitch.me/?noa=11&cac=2&pat=8 -- dumbo
+https://chaosgame.glitch.me/?noa=6&cac=0&pat=8 -- kochflake
+https://chaosgame.glitch.me/?noa=6&hub=1&cac=0&pat=6 -- pentafluff
+https://chaosgame.glitch.me/?noa=8&hub=1&cac=0&pat=8 -- flower power or daisy chain
+https://chaosgame.glitch.me/?noa=7&hub=1&cac=0&pat=8 -- snowflower
 // -----------------------------------------------------------------------------
 // REJECT PILE:
 // 6, 4, 1/2  -- molecule

@@ -19,6 +19,8 @@ function getQueryParam(key, def=false) {
   return v
 }
 
+const PHI = 1.6180339887498948 // AKA the golden ratio
+
 // Take a real number and return how to display it as a fraction.
 // Currently only works if it's some n/12 where n is 0 thru 12.
 function fracify(x) {
@@ -35,6 +37,7 @@ function fracify(x) {
   if (Math.abs(x-10/12) < 1e-12) return "5/6"
   if (Math.abs(x-11/12) < 1e-12) return "11/12"
   if (Math.abs(x-12/12) < 1e-12) return "1"
+  if (Math.abs(x-1/PHI) < 1e-12) return "1/phi"
   return "???"
 }
 
@@ -123,21 +126,21 @@ function uniquify(a) { return [...new Set(a)] }
 
 // Renormalize a list of weights to sum to 1
 function renorm(w) {
-  var tot = w.reduce((a,b)=>a+b)
+  const tot = w.reduce((a,b)=>a+b)
   return w.map(x=>x/tot)
 }
 
 // Return a list of the cumulative sums of l. Eg, [1,2,3] -> [1,3,6]
 function accum(l) {
-  var s = 0
+  let s = 0
   return l.map(x => { s += x; return s })
 }
 
 // Takes a probability p and list of weights w and returns the index (0-based)
 // of the appropriate weight
 function spinner(p, w) {
-  var cum = accum(renorm(w))
-  for (var i = 0; i < w.length; i++) { if (p < cum[i]) return i }
+  const cum = accum(renorm(w))
+  for (let i = 0; i < w.length; i++) { if (p < cum[i]) return i }
   return 0
 }
 
