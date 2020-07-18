@@ -4,7 +4,7 @@ cos, sin, atan2, TAU, sqrt, min, max, shuffle, floor, ceil, round, log, abs,
 createCanvas, resizeCanvas, windowWidth, windowHeight, textWidth, 
 clear, line, width, height, point, mouseX, mouseY, ellipse, rect, noStroke,
 fullscreen, background, stroke, color, fill, text, noFill, keyCode, textSize, 
-push, pop, translate, frameCount, 
+push, pop, translate, frameCount, rotate, textAlign, LEFT, RIGHT, TOP, BOTTOM, 
 clip, range, randrange, midpoint, randelem, randreal, 
 apl, mod, argmin, transpose, uniquify, renorm, spinpick, sortby, digs, commafy, 
 fracify, getQueryParam, rage, blink, tallyhue, 
@@ -16,91 +16,83 @@ new p5() // including this lets you use p5's globals everywhere
 // Constants, Parameters, and Global Variables
 // -----------------------------------------------------------------------------
 
-const infoh = 26 // how many pixels high the info lines at the bottom are
-
-const nom = [
-// name, [noa, hub, cac, pat], stars
-["sierpinski triangle", [3, 0, 0, 6], 5],
-["chinese checkers",    [6, 0, 3, 6], 5],
-["DUD",                 [],           0],
+const nomnom = [
+// ["artsy title",       [noa, hub, cac, pat], stars],
+["plain ole sierpinski",   [ 3, 0, 0, 1/2 ], 5],
+["chinese checkers",       [ 6, 0, 3, 1/2 ], 5],
+["ninja star",             [ 6, 0, 2, 1/2 ], 3],
+["day of the dead",        [ 5, 0, 1, 1/2 ], 3],
+["stained glass window",   [ 6, 0, 0, 1/2 ], 3],
+["snowflake",              [ 6, 0, 3, 1/3 ], 3],
+["snowsquare",             [ 4, 0, 1, 1/2 ], 3],
+["lightning donut",        [12, 0, 6, 1/2 ], 3],
+["pentagon star",          [ 5, 0, 3, 1/3 ], 3],
+["asterisk",               [ 7, 0, 3, 1/2 ], 3],
+["holy pentagon",          [ 5, 0, 0, 1/2 ], 3],
+["snowflakey flower",      [ 7, 0, 4, 1/2 ], 3],
+["arrows",                 [ 3, 0, 1, 1/3 ], 3],
+["jaggly nonagon",         [ 9, 0, 4, 1/2 ], 3],
+["lego hands",             [ 7, 0, 1, 2/3 ], 3],
+["fluffy well",            [10, 0, 2, 1/2 ], 3],
+["stars of david",         [ 6, 0, 0, 7/12], 3],
+["coral",                  [ 8, 0, 0, 2/3 ], 3],
+["footprints",             [10, 0, 0, 2/3 ], 3],
+["sun",                    [ 9, 0, 6, 1/3 ], 3],
+["bubbles",                [ 9, 0, 0, 2/3 ], 3],
+["pentaflake",             [ 5, 0, 0, 7/12], 3],
+["pinwheel squares",       [ 4, 0, 2, 1/4 ], 3],
+["fuzzy triangle",         [ 3, 0, 0, 1/4 ], 3],
+["warm pentagon",          [ 5, 0, 0, 1/3 ], 3],
+["tendrils",               [ 8, 0, 2, 2/3 ], 3],
+["figure eights",          [ 8, 0, 0, 7/12], 3],
+["table saw",              [ 9, 0, 6, 1/4 ], 3],
+["lobster",                [ 7, 0, 3, 5/12], 3],
+["spokey",                 [ 5, 0, 2, 1/4 ], 3],
+["pentaspoke",             [ 5, 0, 1, 1/3 ], 3],
+["hippo",                  [ 3, 0, 1, 1/4 ], 3],
+["fire breathing lizards", [ 9, 0, 3, 1/2 ], 3],
+["gearflake",              [ 8, 0, 2, 7/12], 3],
+["ragdolls",               [12, 0, 3, 2/3 ], 3],  
+["molecule",               [ 6, 0, 4, 1/2 ], 2],
+["dumbo",                  [11, 0, 2, 8/12], 3], 
+["kochflake",              [ 6, 0, 0, 8/12], 3], 
+["pentafluff",             [ 6, 1, 0, 6/12], 3], 
+["flowerpower/daisychain", [ 8, 1, 0, 8/12], 3], 
+["snowflower",             [ 7, 1, 0, 8/12], 3], 
+["carpet",                 [ 4, 0, 1, 5/12], 3], 
+["wheel",                  [ 9, 1, 0, 8/12], 3], 
+["sierpinski dribble",     [ 4, 1, 0, 6/12], 3], 
+["colorful?",              [ 7, 0, 0, 6/12], 3], 
+["doily",                  [ 8, 1, 0, 7/12], 3], 
+["gargoyle totem raven",   [10, 0, 5, 6/12], 3], 
+["hexabubbles",            [ 7, 1, 0, 6/12], 3], 
+["spaceship?",             [ 4, 0, 1, 5/12], 3], 
+["circle flower?",         [10, 1, 0, 8/12], 3], 
+["battle turtle",          [ 8, 1, 5, 6/12], 3], 
+["quilt square?",          [ 4, 0, 1, 5/12], 3], 
+["solid square?",          [ 5, 1, 0, 6/12], 3], 
+["swimming turtle?",       [12, 1, 7, 7/12], 3], 
+["heart smart?",           [ 8, 1, 1, 7/12], 3], 
 ]
 
 // -----------------------------------------------------------------------------
-// Cool settings (noa, cac, pat):
-// 3, 0, 1/2  -- plain sierpinski triangle
-// 6, 3, 1/2  -- chinese checkers board
-// 6, 2, 1/2  -- ninja star
-// 5, 1, 1/2  -- day of the dead
-// 6, 0, 1/2  -- stained glass window
-// 6, 3, 1/3  -- snowflake
-// 4, 1, 1/2  -- squares
-// 12, 6, 1/2 -- lightning donut
-// 5, 3, 1/3  -- pentagon star
-// 7, 3, 1/2  -- asterisk
-// 5, 0, 1/2  -- holy pentagon
-// 7, 4, 1/2  -- snowflakey flower
-// 3, 1, 1/3  -- arrows
-// 9, 4, 1/2  -- jaggly nonagon
-// 7, 1, 2/3  -- lego hands
-// 10, 2, 1/2 -- fluffy well
-// 6, 0, 7/12 -- stars of david
-// 12, 2, 3/4 -- lego feet
-// 8, 0, 2/3  -- coral 
-// 10, 0, 2/3 -- footprints
-// 9, 6, 1/3  -- sun
-// 9, 0, 2/3  -- bubbles
-// 5, 0, 7/12 -- pentaflake
-// 4, 2, 1/4  -- pinwheel squares
-// 3, 0, 1/4  -- fuzzy triangle
-// 5, 0, 1/3  -- warm pentagon
-// 8, 2, 2/3  -- tendrils
-// 8, 0, 7/12 -- figure eights
-// 9, 6, 1/4  -- table saw
-// 7, 3, 5/12 -- lobster
-// 5, 2, 1/4  -- spokey
-// 5, 1, 1/3  -- pentaspoke
-// 3, 1, 1/4  -- hippo
-// 9, 3, 1/2  -- fire breathing lizards
-// 8, 2, 7/12 -- gearflake
-// 12, 3, 2/3 -- ragdolls
-//https://chaosgame.glitch.me/?noa=11&hub=0&cac=2&pat=8 -- dumbo
-//https://chaosgame.glitch.me/?noa=6&hub=0&cac=0&pat=8 -- kochflake
-//https://chaosgame.glitch.me/?noa=6&hub=1&cac=0&pat=6 -- pentafluff
-//https://chaosgame.glitch.me/?noa=8&hub=1&cac=0&pat=8 -- flowerpower/daisychain
-//https://chaosgame.glitch.me/?noa=7&hub=1&cac=0&pat=8 -- snowflower
-//https://chaosgame.glitch.me/?noa=4&hub=0&cac=1&pat=5 -- carpet
-//https://chaosgame.glitch.me/?noa=9&hub=1&cac=0&pat=8 -- wheel
-//https://chaosgame.glitch.me/?noa=4&hub=1&cac=0&pat=6 -- sierpinski dribble
-//https://chaosgame.glitch.me/?noa=7&hub=0&cac=0&pat=6 -- colorful
-//https://chaosgame.glitch.me/?noa=8&hub=1&cac=0&pat=7 -- doily
 // -----------------------------------------------------------------------------
-// REJECT PILE:
-// 6, 4, 1/2  -- molecule
 
+/* VETO PILE
+["lego feet",              [12, 0, 2, 3/4 ], 3 ], // horseshoe skates
+["DUD",                    [ 4, 1, 2, 3/4 ], 0 ],
 
-// Number Of Attractors
-let noa = parseInt(getQueryParam('noa', randrange(3, 12)))
+*/
 
-// Whether to put one of the attractors in the center
-const hub = parseInt(getQueryParam('hub', noa===3 ? 0 : randrange(0,1)))
+const infoh = 26 // how many pixels high the info lines at the bottom are
 
-// CAn't Choose: how many attractors around the last one to exclude
-const cac = parseInt(getQueryParam('cac', hub===1 ? 0 : randrange(0,noa-2)))
-
-// PArtial Teleport: how far from current pt to attractor to jump
-let pat = getQueryParam('pat', randrange(1,11))
-if (pat === 'phi' || pat === 'PHI') { pat = 0.6180339887498948 }
-else { pat = parseInt(pat)/12 }
-
-// How many points to plot at once (more = faster, up to a point)
-let chunk = parseInt(getQueryParam('chunk', 1))
-
-function penc(p) { return fracify(p)==="1/phi" ? "phi" : round(pat*12) }
-
-rage(`?noa=${noa}&hub=${hub}&cac=${cac}&pat=${penc(pat)}`, false)
-
+let noa // Number Of Attractors
+let hub // whether to put one of the attractors in the center
+let cac // CAn't Choose: how many attractors around the last one to exclude
+let pat // PArtial Teleport: how far from current pt to attractor to jump
 let x, y // coordinates
 let grid = [] // keeping track of every pixel we've been at
+let chunk = 1 // how many points to plot at once (more = faster, up to a point)
 let tot = 0 // total number of steps/treads/points we've made so far
 let minp = 0 // min points plotted (aka tally) on any pixel (need regen to know)
 let maxp = 0 // max points plotted (aka tally) on any pixel (tracked as we go)
@@ -108,6 +100,7 @@ let att = [] // list of attractors (points to move to move towards)
 let la = 0 // index of last attractor chosen
 let totline = '' // info line at bottom showing total points plotted
 let maxline = '' // info line at bottom showing max tally on any pixel
+let ppsline = '' // info line at bottom showing plot speed
 let state = 1 // 1 = turtle (plot as we go); 2 = rocket (calculate w/o plotting)
 let tah = {} // tally-hue-hash: map each tally to the hue for that tally
 let calg = 1 // color algorithm
@@ -115,6 +108,61 @@ let rx = 0 // x-coordinate of where regenerating the colors has gotten to
 let minx = -1 // the smallest x-value of any plotted point (tally>0)
 let maxx = -1 // the largest x-value of any plotted point (tally>0)
 let drawt = Date.now() // timestamp that we last refreshed the plot
+let pps = 0 // Points plotted per second
+let titlehash = {} // maps the rawname to the artsy title
+let counthash = {} // maps the rawname to the index in nomnom
+let rawname // Name that encodes the parameters like "n3h0c0p6"
+
+// -----------------------------------------------------------------------------
+// Managing the parameters and the artsy titles
+// -----------------------------------------------------------------------------
+
+// Takes a partial teleport (eg .5) and returns encoding for the URL (eg "6")
+function penc(p) { return fracify(p)==="1/phi" ? "PHI" : round(p*12) }
+
+// Inverse of penc: decode pat (eg "1") and return real number (eg 1/12)
+function pdec(s) { 
+  if (s === 'phi' || s === 'PHI') { return 0.6180339887498948 }
+  return parseInt(s)/12
+}
+
+function rawnamify(n, h, c, p) { return `n${n}h${h}c${c}p${penc(p)}` }
+
+// Take a rawname like "n3h0c0p6" and return the list of params, [3, 0, 0, 1/2]
+function parseraw(s) {
+  const m = s.match(/^n(\d+)h(\d+)c(\d+)p(\w+)$/)
+  if (m===null) return [2, 0, 0, 1/2]
+  return [parseInt(m[1]), parseInt(m[2]), parseInt(m[3]), pdec(m[4])]
+}
+
+// Pick a random set of parameters and return the rawname
+function randraw() {
+  // not sure if it makes sense to have cac>0 if hub is 1 but the what the heck
+  let n = randrange(3, 12)
+  let h = n === 3 ? 0 : randrange(0,1)
+  let c = randrange(0, n-2)
+  let p = randrange(1, 11)/12
+  return rawnamify(n, h, c, p)
+}
+
+noa = parseInt(getQueryParam('noa', 3)) // originally randrange(3, 12)
+hub = parseInt(getQueryParam('hub', 0)) // was noa==3 ? 0 : randrange(0,1)
+cac = parseInt(getQueryParam('cac', 0)) // originally randrage(0, noa-2)
+pat = pdec(getQueryParam('pat', 6)) // originally randrange(1, 11)
+
+rage(`?noa=${noa}&hub=${hub}&cac=${cac}&pat=${penc(pat)}`, false)
+
+
+rawname = rawnamify(noa, hub, cac, pat)
+
+console.log(`${rawname} -- ${noa}, ${hub}, ${cac}, ${pat}`)
+
+let i = 0
+nomnom.forEach(x => {
+  const [n, h, c, p] = x[1]
+  titlehash[rawnamify(n, h, c, p)] = x[0]
+  counthash[rawnamify(n, h, c, p)] = i++
+})
 
 // -----------------------------------------------------------------------------
 // Displaying things on the screen besides the actual fractals
@@ -127,17 +175,31 @@ function instructions() {
 
 Screen: ${width} pixels wide by ${height} pixels high
 Params: ${noa} attractors, ` +
-`${hub===1 ? "w/ a hub, " : "w/o a hub, "} ` +
-`excluding ${cac}, w/ partial teleport ${fracify(pat)}
+`${hub===1 ? "w/" : "w/o"} a hub, ` +
+`excluding ${cac}, partial teleport ${fracify(pat)}
 Press...
   SPACE to toggle hyperspeed   ⟶
-  R to restart w/ random params
+  CLICK for new fractal
+  G to regenerate colors (or 1/2/3/etc for other color funcs)`
+/*
   N to refresh everything but number of attractors
   H to refresh everything but whether there's a hub
   P to refresh everything but the partial teleport
-  G to regenerate colors (or 1/2/3/etc for other color funcs)`
-
-  text(thecopy , 5, 15)
+*/
+  text(thecopy, 5, 15)
+  const baretitle = rawnamify(noa, hub, cac, pat)
+  let title = titlehash[baretitle]
+  if (title === undefined) title = baretitle
+  fill(1, 0, .3); textSize(width <  500 ?  37 :
+                           width <  640 ?  65 :
+                           width <  800 ?  68 :
+                           width < 1000 ?  70 :
+                           width < 2000 ? 100 : 
+                           width < 3000 ? 150 : 300)
+  push()
+  textAlign(LEFT, TOP)
+  text(`“${title}”`, 5, 160, width-10, height-160)
+  pop()
 }
 
 function rainbar() {
@@ -162,7 +224,7 @@ function rocket() {
   if (state===1) {
     text("🖌️∴🐢", x, yt)
   } else if (state===2) {
-    text("🤫∴🚀", x, yt) 
+    text("🙈∴🚀", x, yt)
   } else {
     text("⌛∴🥱", x, yt)  // not currently used
   }
@@ -256,17 +318,46 @@ function regen() {
 
 // Refresh the counters at the bottom of the screen
 function infoup() {
+  textSize(30)
+  const maxw = textWidth(maxline)+3
+  const totw = textWidth(totline)+3
+  textSize(15)
+  const ppsw = textWidth(ppsline)+3
   textSize(30); noStroke(); fill('Black')
-  rect(0, height-infoh*2-3, textWidth(maxline)+3, infoh+2)
-  rect(0, height-infoh,     textWidth(totline)+3, infoh+2)
+  
+  rect(0, height-infoh*2-3, maxw, infoh+2)
+  rect(0, height-infoh,     totw, infoh+2)
+  rect(totw, height-infoh+11,  ppsw, infoh+2)
   maxline = `max  ${commafy(maxp)}`
   totline = `total: ${commafy(tot)}`
+  ppsline = `   (+${commafy(round(pps))}pps)`
   stroke('Black'); fill('White')
   text(maxline, 3, height - infoh - 3*2)
   text(totline, 3, height-3)
-  stroke('Black'); 
+  textSize(15); fill(1, 0, .3)
+  text(ppsline, totw, height-3)
+  textSize(30)
+  stroke('Black')
   if (calg===0) { fill(1, 0, .3) } else { fill(tallyhue(calg-1, 8-1), 1, 1) }
   text(':', 60, height - infoh - 3*2)
+}
+
+function restart() {
+  //console.log(`${rawname} -> ${counthash[rawname]}`)
+  const tmp = counthash[rawname]
+  let n, h, c, p
+  if (tmp === undefined || tmp+1 >= nomnom.length) {
+    let r
+    // Warning: this will be an infinite loop if every combination of params
+    // is in the nomnom list!
+    while(counthash[r = randraw()] !== undefined) {}
+    [n, h, c, p] = parseraw(r)
+  } else {
+    [n, h, c, p] = nomnom[tmp+1][1]
+  }
+  
+  rage(`/?noa=${n}&hub=${h}&cac=${c}&pat=${penc(p)}`)
+  //rage('/')
 }
 
 // -----------------------------------------------------------------------------
@@ -294,11 +385,13 @@ function draw() {
         }
       }
     }
+    pps = 0
   } else {
     for (let i = 0; i < chunk; i++) chaos()
-    if (newt-drawt < 1000) chunk *= 2
-    if (newt-drawt > 2000) chunk = ceil(chunk/2)
-    if (newt-drawt > 4000) chunk = 1
+    if (newt-drawt < 1000) chunk = ceil(chunk*1.11)
+    if (newt-drawt > 2000) chunk = ceil(chunk*0.5)
+    if (newt-drawt > 3000) chunk = 1
+    pps = chunk/(newt-drawt)*1000
   }
   infoup() 
   rocket()
@@ -348,7 +441,7 @@ function keyPressed() {
     const newpat = penc(pat)
     rage(`/?noa=${newnoa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
   } else if (keyCode === 82) { // r
-    rage('/')
+    restart()
   } else if (keyCode == 78) { // n
     const newcac = randrange(0, noa-2)
     const newpat = randrange(1,11)
@@ -369,6 +462,11 @@ function keyPressed() {
     stroke(blink(1), 1, 1) // debugging
   }
   return false
+}
+
+// DRY alert: same as hitting r above
+function mouseClicked() {
+  restart()
 }
 
 // -----------------------------------------------------------------------------
