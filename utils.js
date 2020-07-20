@@ -19,28 +19,6 @@ function getQueryParam(key, def=false) {
   return v
 }
 
-const PHI = 1.6180339887498948 // AKA the golden ratio
-
-// Take a real number and return how to display it as a fraction.
-// Currently only works if it's some n/12 where n is 0 thru 12.
-function fracify(x) {
-  if (Math.abs(x- 0/12) < 1e-12) return "0"
-  if (Math.abs(x- 1/12) < 1e-12) return "1/12"
-  if (Math.abs(x- 2/12) < 1e-12) return "1/6"
-  if (Math.abs(x- 3/12) < 1e-12) return "1/4"
-  if (Math.abs(x- 4/12) < 1e-12) return "1/3"
-  if (Math.abs(x- 5/12) < 1e-12) return "5/12"
-  if (Math.abs(x- 6/12) < 1e-12) return "1/2"
-  if (Math.abs(x- 7/12) < 1e-12) return "7/12"
-  if (Math.abs(x- 8/12) < 1e-12) return "2/3"
-  if (Math.abs(x- 9/12) < 1e-12) return "3/4"
-  if (Math.abs(x-10/12) < 1e-12) return "5/6"
-  if (Math.abs(x-11/12) < 1e-12) return "11/12"
-  if (Math.abs(x-12/12) < 1e-12) return "1"
-  if (Math.abs(x-1/PHI) < 1e-12) return "1/phi"
-  return "???"
-}
-
 // Number of digits in a number n
 function digs(n) { return ("" + n).length }
 

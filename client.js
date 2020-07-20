@@ -7,7 +7,7 @@ fullscreen, background, stroke, color, fill, text, noFill, keyCode, textSize,
 push, pop, translate, frameCount, rotate, textAlign, LEFT, RIGHT, TOP, BOTTOM, 
 clip, range, randrange, midpoint, randelem, randreal, 
 apl, mod, argmin, transpose, uniquify, renorm, spinpick, sortby, digs, commafy, 
-fracify, getQueryParam, rage, blink, tallyhue, 
+fracify, getQueryParam, rage, blink, tallyhue
 */
 
 new p5() // including this lets you use p5's globals everywhere
@@ -15,6 +15,9 @@ new p5() // including this lets you use p5's globals everywhere
 // -----------------------------------------------------------------------------
 // Constants, Parameters, and Global Variables
 // -----------------------------------------------------------------------------
+
+const PHI = 1.6180339887498948 // AKA the golden ratio
+const LN2 = Math.log(2) // the natural log of 2, .693ish
 
 const nomnom = [
 // ["artsy title",       [noa, hub, cac, pat], stars],
@@ -39,7 +42,8 @@ const nomnom = [
 ["footprints",             [10, 0, 0, 2/3 ], 3],
 ["sun",                    [ 9, 0, 6, 1/3 ], 3],
 ["bubbles",                [ 9, 0, 0, 2/3 ], 3],
-["pentaflake",             [ 5, 0, 0, 7/12], 3],
+["pentaflake",             [ 5, 0, 0,PHI-1], 3], 
+["flowerpower",            [ 8, 1, 0,  LN2], 3],
 ["pinwheel squares",       [ 4, 0, 2, 1/4 ], 3],
 ["fuzzy triangle",         [ 3, 0, 0, 1/4 ], 3],
 ["warm pentagon",          [ 5, 0, 0, 1/3 ], 3],
@@ -56,32 +60,34 @@ const nomnom = [
 ["molecule",               [ 6, 0, 4, 1/2 ], 2],
 ["dumbo",                  [11, 0, 2, 8/12], 3], 
 ["kochflake",              [ 6, 0, 0, 8/12], 3], 
-["pentafluff",             [ 6, 1, 0, 6/12], 3], 
-["flowerpower/daisychain", [ 8, 1, 0, 8/12], 3], 
-["snowflower",             [ 7, 1, 0, 8/12], 3], 
-["carpet",                 [ 4, 0, 1, 5/12], 3], 
+["pentalace",              [ 6, 1, 0, 6/12], 3], 
+["snowflower",             [ 7, 1, 0, 8/12], 3],
 ["wheel",                  [ 9, 1, 0, 8/12], 3], 
 ["sierpinski dribble",     [ 4, 1, 0, 6/12], 3], 
-["colorful?",              [ 7, 0, 0, 6/12], 3], 
+["red star donut",         [ 7, 0, 0, 6/12], 3], 
 ["doily",                  [ 8, 1, 0, 7/12], 3], 
-["gargoyle totem raven",   [10, 0, 5, 6/12], 3], 
-["hexabubbles",            [ 7, 1, 0, 6/12], 3], 
-["spaceship?",             [ 4, 0, 1, 5/12], 3], 
-["circle flower?",         [10, 1, 0, 8/12], 3], 
+["gargoyles",              [10, 0, 5, 6/12], 3], 
+["hexabubbles",            [ 7, 1, 0, 6/12], 3],  
+["flircle",                [10, 1, 0, 8/12], 3], 
 ["battle turtle",          [ 8, 1, 5, 6/12], 3], 
-["quilt square?",          [ 4, 0, 1, 5/12], 3], 
-["solid square?",          [ 5, 1, 0, 6/12], 3], 
-["swimming turtle?",       [12, 1, 7, 7/12], 3], 
-["heart smart?",           [ 8, 1, 1, 7/12], 3], 
+["quilt square",           [ 4, 0, 1, 5/12], 3], 
+["lightning square",       [ 5, 1, 0, 6/12], 3],  
+["heart smart",            [ 8, 1, 1, 7/12], 3],
+["buff domo",              [ 8, 0, 1, 7/12], 3],
+["icey flower",            [11, 0, 8, 5/12], 3],
+["spaceship",              [ 5, 1, 3, 3/12], 3],
+["nona gone crazy",        [10, 1, 0, 6/12], 3],
+["monkeys",                [ 9, 0, 1, 7/12], 3],
 ]
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
 /* VETO PILE
-["lego feet",              [12, 0, 2, 3/4 ], 3 ], // horseshoe skates
-["DUD",                    [ 4, 1, 2, 3/4 ], 0 ],
-
+["lego feet",              [12, 0, 2,  3/4 ], 3 ], // horseshoe skates
+["DUD",                    [ 4, 1, 2,  3/4 ], 0 ],
+["DUD",                    [ 3, 0, 0, 11/12], 0 ],
+["swimming turtle?",       [12, 1, 7, 7/12], 3],
 */
 
 const infoh = 26 // how many pixels high the info lines at the bottom are
@@ -117,12 +123,41 @@ let rawname // Name that encodes the parameters like "n3h0c0p6"
 // Managing the parameters and the artsy titles
 // -----------------------------------------------------------------------------
 
+// Take a real number and return how to display it as a fraction.
+// Currently only works if it's some n/12 where n is 0 thru 12.
+function fracify(x) {
+  if (Math.abs(x- 0/12) < 1e-12) return "0"
+  if (Math.abs(x- 1/12) < 1e-12) return "1/12"
+  if (Math.abs(x- 2/12) < 1e-12) return "1/6"
+  if (Math.abs(x- 3/12) < 1e-12) return "1/4"
+  if (Math.abs(x- 4/12) < 1e-12) return "1/3"
+  if (Math.abs(x- 5/12) < 1e-12) return "5/12"
+  if (Math.abs(x- 6/12) < 1e-12) return "1/2"
+  if (Math.abs(x- 7/12) < 1e-12) return "7/12"
+  if (Math.abs(x- 8/12) < 1e-12) return "2/3"
+  if (Math.abs(x- 9/12) < 1e-12) return "3/4"
+  if (Math.abs(x-10/12) < 1e-12) return "5/6"
+  if (Math.abs(x-11/12) < 1e-12) return "11/12"
+  if (Math.abs(x-12/12) < 1e-12) return "1"
+  if (Math.abs(x-1/PHI) < 1e-12) return "1/phi"
+  if (Math.abs(x-  LN2) < 1e-12) return "log2"
+  if (Math.abs(x- .692) < 1e-12) return ".692"
+  return "???"
+}
+
 // Takes a partial teleport (eg .5) and returns encoding for the URL (eg "6")
-function penc(p) { return fracify(p)==="1/phi" ? "PHI" : round(p*12) }
+function penc(p) {
+  const x = fracify(p)
+  return x==="1/phi" ? "PH1" :
+         x==="log2"  ? "LN2" : 
+         x===".692"  ? "P69" : round(p*12) 
+}
 
 // Inverse of penc: decode pat (eg "1") and return real number (eg 1/12)
 function pdec(s) { 
-  if (s === 'phi' || s === 'PHI') { return 0.6180339887498948 }
+  if (s === 'ph1' || s === 'PH1') { return 0.6180339887498948 }
+  if (s === 'ln2' || s === 'LN2') { return Math.log(2) }
+  if (s === 'p69' || s === 'P69') { return 0.692 }
   return parseInt(s)/12
 }
 
@@ -173,14 +208,14 @@ function instructions() {
   textSize(15)
   const thecopy = `The Chaos Game! by Daniel Reeves and Cantor Soule-Reeves
 
-Screen: ${width} pixels wide by ${height} pixels high
-Params: ${noa} attractors, ` +
+Drawing with math   ${" ".repeat(35)}   (${width}x${height} pixels)
+${noa} attractors, ` +
 `${hub===1 ? "w/" : "w/o"} a hub, ` +
 `excluding ${cac}, partial teleport ${fracify(pat)}
-Press...
-  SPACE to toggle hyperspeed   ⟶
-  CLICK for new fractal
-  G to regenerate colors (or 1/2/3/etc for other color funcs)`
+
+• SPACE to toggle hyperspeed   ⟶
+• CLICK (or R) for new fractal
+• G to regenerate (or 1/2/3/etc for other color schemes)`
 /*
   N to refresh everything but number of attractors
   H to refresh everything but whether there's a hub
@@ -212,7 +247,7 @@ function rainbar() {
 
 function rocket() {
   const x = 250
-  const yb = 79 // y-value of the box to blank out the old text
+  const yb = 78 // y-value of the box to blank out the old text
   const yt = yb+44 // y-value of the text
   const w = 130
   const h =  50
@@ -220,7 +255,7 @@ function rocket() {
   fill('Black')
   rect(x, yb, w, h)
   fill('White')
-  textSize(50)
+  textSize(48)
   if (state===1) {
     text("🖌️∴🐢", x, yt)
   } else if (state===2) {
