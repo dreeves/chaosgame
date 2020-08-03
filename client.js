@@ -76,8 +76,15 @@ const nomnom = [
 ["buff domo",              [ 8, 0, 1, 7/12], 3],
 ["icey flower",            [11, 0, 8, 5/12], 3],
 ["spaceship",              [ 5, 1, 3, 3/12], 3],
-["nona gone crazy",        [10, 1, 0, 6/12], 3],
+["nona-gone crazy",        [10, 1, 0, 6/12], 3],
 ["monkeys",                [ 9, 0, 1, 7/12], 3],
+["simon the spaceturtle",  [10, 1, 3, 7/12], 3],
+["goodness gracious bee",  [10, 1, 5, 6/12], 3],
+["pentasplosion",          [ 6, 1, 0, 8/12], 3],
+["pentapentapenta",        [ 5, 0, 2, 4/12], 3],
+["disco square",           [ 5, 1, 0, 5/12], 3],
+["scoobydoo van",          [ 8, 0, 2, 5/12], 3],
+["3-legged owl-frog",      [12, 1, 9, 5/12], 3],
 ]
 
 // -----------------------------------------------------------------------------
@@ -224,7 +231,7 @@ ${noa} attractors, ` +
   text(thecopy, 5, 15)
   const baretitle = rawnamify(noa, hub, cac, pat)
   let title = titlehash[baretitle]
-  if (title === undefined) title = baretitle
+  if (title === undefined) title = `untitled ${baretitle}`
   fill(1, 0, .3); textSize(width <  500 ?  37 :
                            width <  640 ?  65 :
                            width <  800 ?  68 :
@@ -259,7 +266,8 @@ function rocket() {
   if (state===1) {
     text("🖌️∴🐢", x, yt)
   } else if (state===2) {
-    text("🙈∴🚀", x, yt)
+    text("🖌️∴🚀", x, yt)
+    text("🚫", x, yt)
   } else {
     text("⌛∴🥱", x, yt)  // not currently used
   }
@@ -499,7 +507,6 @@ function keyPressed() {
   return false
 }
 
-// DRY alert: same as hitting r above
 function mouseClicked() {
   restart()
 }
