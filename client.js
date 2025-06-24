@@ -16,7 +16,7 @@ getQueryParam, rage, blink, tallyhue, lerp2
 // Constants, Parameters, and Global Variables
 // -----------------------------------------------------------------------------
 
-const VER = "2025.06.24-f"  // displayed super tiny on the page for debugging
+const VER = "2025.06.24-g"  // displayed super tiny on the page for debugging
 const PHI = 1.6180339887498948 // AKA the golden ratio
 const LN2 = Math.log(2) // the natural log of 2, .693ish
 const SP1 = 0.63455 // special constant for special fractal; .635 looks rightish
@@ -573,14 +573,13 @@ function setup() {
 
   // Help dialog is now handled in index.html
 
-  const tmp = 5
   let slowerButton = createButton('🌿')
-  slowerButton.position(190-tmp, 84)
+  slowerButton.position(185, 84)
   styleButton(slowerButton)
   slowerButton.mousePressed(() => chunk = max(1, chunk / 2))
 
   let fasterButton = createButton('⚡')
-  fasterButton.position(240-tmp-2, 84)
+  fasterButton.position(232, 84)
   styleButton(fasterButton)
   fasterButton.mousePressed(() => chunk *= 2)
 
@@ -588,15 +587,15 @@ function setup() {
   let backButton = createButton('◀️')
   let fwdButton = createButton('▶️')
   if (titlehash[rawnamify(noa, hub, cac, pat)] === undefined) {
-    freshButton.position(350-tmp*2, 84)
+    freshButton.position(339, 84)
     styleButton(freshButton)
     freshButton.mousePressed(() => restart(-1))
   } else {
-    backButton.position(330-tmp*2, 84)
+    backButton.position(319, 84)
     styleButton(backButton)
     backButton.mousePressed(() => restart(-1))
 
-    fwdButton.position(380-tmp*2-2, 84)
+    fwdButton.position(366, 84)
     styleButton(fwdButton)
     fwdButton.mousePressed(() => restart(+1))
   }
