@@ -16,7 +16,7 @@ getQueryParam, rage, blink, tallyhue, lerp2
 // Constants, Parameters, and Global Variables
 // -----------------------------------------------------------------------------
 
-const VER = "2025.06.24-c"  // displayed super tiny in upper right for debugging
+const VER = "2025.06.24-e"  // displayed super tiny in upper right for debugging
 const PHI = 1.6180339887498948 // AKA the golden ratio
 const LN2 = Math.log(2) // the natural log of 2, .693ish
 const SP1 = 0.63455 // special constant for special fractal; .635 looks rightish
@@ -657,7 +657,7 @@ function keyPressed() {
 }
 
 function mouseClicked() {
-  // Don't handle clicks if help dialog is open
+  // Don't handle clicks if help dialog is open (codebuff shit here)
   if (window.isHelpDialogOpen && window.isHelpDialogOpen()) return;
   
   if (document.elementFromPoint(mouseX, mouseY).tagName === 'BUTTON')
@@ -670,7 +670,8 @@ function mouseClicked() {
              mouseY > RBBx  && mouseY < RBBy+RBBh) {
     regen(floor(lerp2(mouseX, RBBx, RBBx+RBBw, 1, 9)))
   } else {
-    restart(+1)
+    //restart(+1) // used to advance to next fractal on click
+    window.showHelpDialog()
   }  
 }
 
