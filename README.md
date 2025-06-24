@@ -2,6 +2,8 @@ Cantor Soule-Reeves and Daniel Reeves
 
 Math + randomness = fractals
 
+Hosted at https://chaos.dreev.es
+
 ## Changelog
 
 ```
