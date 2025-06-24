@@ -16,7 +16,7 @@ getQueryParam, rage, blink, tallyhue, lerp2
 // Constants, Parameters, and Global Variables
 // -----------------------------------------------------------------------------
 
-const VER = "2025.06.25-f"
+const VER = "2025.06.25-g"
 const PHI = 1.6180339887498948 // AKA the golden ratio
 const LN2 = Math.log(2) // the natural log of 2, .693ish
 const SP1 = 0.63455 // special constant for special fractal; .635 looks rightish
@@ -473,7 +473,7 @@ function restart(dir=1) {
   }
   
   rage(`/chaosgame?noa=${n}&hub=${h}&cac=${c}&pat=${penc(p)}`)
-  //rage('/')
+  //rage('/chaosgame') // or originally this was just rage('/') on Glitch
 }
 
 // -----------------------------------------------------------------------------
