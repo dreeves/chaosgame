@@ -472,7 +472,7 @@ function restart(dir=1) {
     [n, h, c, p] = nomnom[num+dir][1]
   }
   
-  rage(`/?noa=${n}&hub=${h}&cac=${c}&pat=${penc(p)}`)
+  rage(`/chaosgame/?noa=${n}&hub=${h}&cac=${c}&pat=${penc(p)}`)
   //rage('/')
 }
 
