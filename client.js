@@ -587,15 +587,15 @@ function setup() {
   let backButton = createButton('◀️')
   let fwdButton = createButton('▶️')
   if (titlehash[rawnamify(noa, hub, cac, pat)] === undefined) {
-    freshButton.position(339, 84)
+    freshButton.position(338, 84)
     styleButton(freshButton)
     freshButton.mousePressed(() => restart(-1))
   } else {
-    backButton.position(319, 84)
+    backButton.position(318, 84)
     styleButton(backButton)
     backButton.mousePressed(() => restart(-1))
 
-    fwdButton.position(366, 84)
+    fwdButton.position(365, 84)
     styleButton(fwdButton)
     fwdButton.mousePressed(() => restart(+1))
   }
