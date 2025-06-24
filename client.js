@@ -472,7 +472,7 @@ function restart(dir=1) {
     [n, h, c, p] = nomnom[num+dir][1]
   }
   
-  rage(`/?noa=${n}&hub=${h}&cac=${c}&pat=${penc(p)}`)
+  rage(`/chaosgame?noa=${n}&hub=${h}&cac=${c}&pat=${penc(p)}`)
   //rage('/')
 }
 
@@ -620,7 +620,7 @@ function keyPressed() {
   } else if (keyCode == 78) { // n: randomize cac and pat
     const newcac = randrange(0, noa-2)
     const newpat = randrange(1,11)
-    rage(`/chaosgame/?noa=${noa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
+    rage(`/chaosgame?noa=${noa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
   } else if (keyCode === 67) { // c
   } else if (keyCode === 71) { // g
     regen(1)
@@ -632,12 +632,12 @@ function keyPressed() {
     const newnoa = randrange(hub===0 ? 3 : 4, 12)
     const newcac = hub===1 ? 0 : randrange(0, newnoa-2)
     const newpat = penc(pat)
-    rage(`/chaosgame/?noa=${newnoa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
+    rage(`/chaosgame?noa=${newnoa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
   } else if (keyCode === 80) { // p: randomize all but hub
     const newnoa = randrange(3,12)
     const newcac = randrange(0, newnoa-2)
     const newpat = penc(pat)
-    rage(`/chaosgame/?noa=${newnoa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
+    rage(`/chaosgame?noa=${newnoa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
   } else if (keyCode === 37) { // left arrow (cantor's preference)
     chunk = max(1, chunk - .01)
   } else if (keyCode === 39) { // right arrow
