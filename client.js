@@ -16,7 +16,7 @@ getQueryParam, rage, blink, tallyhue, lerp2
 // Constants, Parameters, and Global Variables
 // -----------------------------------------------------------------------------
 
-const VER = "2025.06.24-e"  // displayed super tiny in upper right for debugging
+const VER = "2025.06.24-f"  // displayed super tiny on the page for debugging
 const PHI = 1.6180339887498948 // AKA the golden ratio
 const LN2 = Math.log(2) // the natural log of 2, .693ish
 const SP1 = 0.63455 // special constant for special fractal; .635 looks rightish
@@ -253,7 +253,7 @@ ${noa} attractors, ` +
 `${hub===1 ? "w/" : "w/o"} a hub, ` +
 `excluding ${cac}, partial teleport ${fracify(pat)}`
   stroke('Black'); fill('White'); textSize(15); text(thecopy, 5, 15)
-  fill(1, 0, .3); textSize(9); text(VER, width-60, 10)
+  fill(1, 0, .3); textSize(9); text(VER, 187, 52)
   const baretitle = rawnamify(noa, hub, cac, pat)
   let title = titlehash[baretitle]
   if (title === undefined) title = `untitled ${baretitle}`
@@ -573,13 +573,14 @@ function setup() {
 
   // Help dialog is now handled in index.html
 
+  const tmp = 5
   let slowerButton = createButton('🌿')
-  slowerButton.position(190, 84)
+  slowerButton.position(190-tmp, 84)
   styleButton(slowerButton)
   slowerButton.mousePressed(() => chunk = max(1, chunk / 2))
 
   let fasterButton = createButton('⚡')
-  fasterButton.position(275-35, 84)
+  fasterButton.position(240-tmp-2, 84)
   styleButton(fasterButton)
   fasterButton.mousePressed(() => chunk *= 2)
 
@@ -587,15 +588,15 @@ function setup() {
   let backButton = createButton('◀️')
   let fwdButton = createButton('▶️')
   if (titlehash[rawnamify(noa, hub, cac, pat)] === undefined) {
-    freshButton.position(350, 84)
+    freshButton.position(350-tmp*2, 84)
     styleButton(freshButton)
     freshButton.mousePressed(() => restart(-1))
   } else {
-    backButton.position(330, 84)
+    backButton.position(330-tmp*2, 84)
     styleButton(backButton)
     backButton.mousePressed(() => restart(-1))
 
-    fwdButton.position(380, 84)
+    fwdButton.position(380-tmp*2-2, 84)
     styleButton(fwdButton)
     fwdButton.mousePressed(() => restart(+1))
   }
