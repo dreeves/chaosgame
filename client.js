@@ -16,7 +16,7 @@ getQueryParam, rage, blink, tallyhue, lerp2
 // Constants, Parameters, and Global Variables
 // -----------------------------------------------------------------------------
 
-const VER = "2025.06.25-h"
+const VER = "2025.06.25-k"  // displayed super tiny in upper right for debugging
 const PHI = 1.6180339887498948 // AKA the golden ratio
 const LN2 = Math.log(2) // the natural log of 2, .693ish
 const SP1 = 0.63455 // special constant for special fractal; .635 looks rightish
@@ -227,7 +227,7 @@ hub = parseInt(getQueryParam('hub',      nomnom[0][1][1]))
 cac = parseInt(getQueryParam('cac',      nomnom[0][1][2]))
 pat = pdec(    getQueryParam('pat', penc(nomnom[0][1][3])))
 
-rage(`/chaosgame?noa=${noa}&hub=${hub}&cac=${cac}&pat=${penc(pat)}`, false)
+rage(`/?noa=${noa}&hub=${hub}&cac=${cac}&pat=${penc(pat)}`, false)
 
 
 rawname = rawnamify(noa, hub, cac, pat)
@@ -472,7 +472,7 @@ function restart(dir=1) {
     [n, h, c, p] = nomnom[num+dir][1]
   }
   
-  rage(`/chaosgame?noa=${n}&hub=${h}&cac=${c}&pat=${penc(p)}`)
+  rage(`/?noa=${n}&hub=${h}&cac=${c}&pat=${penc(p)}`)
   //rage('/chaosgame') // or originally this was just rage('/') on Glitch
 }
 
@@ -571,27 +571,32 @@ function setup() {
   instructions()
   rainbar() 
 
-  const tmp = 35
-  
   let slowerButton = createButton('🌿')
-  slowerButton.position(225-tmp, 84)
+  slowerButton.position(190, 84)
   styleButton(slowerButton)
   slowerButton.mousePressed(() => chunk = max(1, chunk / 2))
 
   let fasterButton = createButton('⚡')
-  fasterButton.position(275-tmp, 84)
+  fasterButton.position(275-35, 84)
   styleButton(fasterButton)
   fasterButton.mousePressed(() => chunk *= 2)
 
-  let backButton = createButton('◀️') // originally ↩️
-  backButton.position(370-40, 84)
-  styleButton(backButton)
-  backButton.mousePressed(() => restart(-1))
-
+  let freshButton = createButton('↩️') 
+  let backButton = createButton('◀️')
   let fwdButton = createButton('▶️')
-  fwdButton.position(420-40, 84)
-  styleButton(fwdButton)
-  fwdButton.mousePressed(() => restart(+1))
+  if (titlehash[rawnamify(noa, hub, cac, pat)] === undefined) {
+    freshButton.position(350, 84)
+    styleButton(freshButton)
+    freshButton.mousePressed(() => restart(-1))
+  } else {
+    backButton.position(330, 84)
+    styleButton(backButton)
+    backButton.mousePressed(() => restart(-1))
+
+    fwdButton.position(380, 84)
+    styleButton(fwdButton)
+    fwdButton.mousePressed(() => restart(+1))
+  }
 }
 
 function toggleHyper() {
@@ -620,7 +625,7 @@ function keyPressed() {
   } else if (keyCode == 78) { // n: randomize cac and pat
     const newcac = randrange(0, noa-2)
     const newpat = randrange(1,11)
-    rage(`/chaosgame?noa=${noa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
+    rage(`/?noa=${noa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
   } else if (keyCode === 67) { // c
   } else if (keyCode === 71) { // g
     regen(1)
@@ -632,12 +637,12 @@ function keyPressed() {
     const newnoa = randrange(hub===0 ? 3 : 4, 12)
     const newcac = hub===1 ? 0 : randrange(0, newnoa-2)
     const newpat = penc(pat)
-    rage(`/chaosgame?noa=${newnoa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
+    rage(`/?noa=${newnoa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
   } else if (keyCode === 80) { // p: randomize all but hub
     const newnoa = randrange(3,12)
     const newcac = randrange(0, newnoa-2)
     const newpat = penc(pat)
-    rage(`/chaosgame?noa=${newnoa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
+    rage(`/?noa=${newnoa}&hub=${hub}&cac=${newcac}&pat=${newpat}`)
   } else if (keyCode === 37) { // left arrow (cantor's preference)
     chunk = max(1, chunk - .01)
   } else if (keyCode === 39) { // right arrow
