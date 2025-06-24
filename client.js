@@ -16,7 +16,7 @@ getQueryParam, rage, blink, tallyhue, lerp2
 // Constants, Parameters, and Global Variables
 // -----------------------------------------------------------------------------
 
-const VER = "2025.06.24-a"  // displayed super tiny in upper right for debugging
+const VER = "2025.06.24-c"  // displayed super tiny in upper right for debugging
 const PHI = 1.6180339887498948 // AKA the golden ratio
 const LN2 = Math.log(2) // the natural log of 2, .693ish
 const SP1 = 0.63455 // special constant for special fractal; .635 looks rightish
@@ -571,6 +571,13 @@ function setup() {
   instructions()
   rainbar() 
 
+  // Set up help dialog
+  const helpDialog = document.getElementById('helpDialog');
+  document.getElementById('closeHelp').onclick = () => helpDialog.close();
+  
+  // Optional: prevent Esc from closing if you want custom logic
+  helpDialog.addEventListener('cancel', e => e.preventDefault());
+
   let slowerButton = createButton('🌿')
   slowerButton.position(190, 84)
   styleButton(slowerButton)
@@ -608,16 +615,7 @@ function toggleHyper() {
 function keyPressed() {
   console.log(`Key pressed! keyCode=${keyCode}`)
   if (keyCode === 191) { // ? or /
-    alert(`
-• Click the 🖌️∴🐢/🚀 to toggle hyperspeed where the screen doesn't refresh
-• Click the rainbow (or press 1-9) to force-regenerate when in hyperspeed
-• Click the 🌿/⚡ to change speed (not too much or you'll hang the browser)
-• Click ◀️/▶️ for prev/next fractal (or press R or click anywhere for next)
-• Or use the arrows or angle brackets or J/L or +/- for finer-grained speed control
-• (N to change everything but number of attractors)
-• (H to change everything but whether there's a hub)
-• (P to change everything but the partial teleport)
-`)
+    document.getElementById('helpDialog').showModal()
   } else if (keyCode === 32) { // space
     toggleHyper()
   } else if (keyCode === 82) { // r

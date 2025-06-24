@@ -25,15 +25,13 @@
 <meta name="twitter:url" content="https://chaos.dreev.es/">
 <meta name="twitter:title" content="Chaos Game">
 <meta name="twitter:description" content="Drawing with math">
-<meta name="twitter:image" content="https://chaos.dreev.es/day-of-the-dead.png">
-<meta name="twitter:image:alt" content="Chaos Game with 5 attractors aka Day of the Dead">
 
 <!-- Additional SEO (Codebuff came up with all this) -->
 <meta name="theme-color" content="#000000">
 <meta name="application-name" content="Chaos Game">
 <meta name="apple-mobile-web-app-title" content="Chaos Game">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="mobile-web-app-capable" content="yes">
 
 <!-- Structured Data (also Codebuff) -->
 <script type="application/ld+json">
@@ -64,5 +62,17 @@
 <script src="client.js"></script>
 </head>
 <body>
+<dialog id="helpDialog" aria-labelledby="help-title">
+  <h2 id="help-title">Help</h2>
+  <p>• Click the 🖌️∴🐢/🚀 to toggle hyperspeed. Hyperspeed means the screen does NOT refresh as it goes.<br>
+• Click the rainbow (or press 1-9) for a one-time refresh of the screen when in hyperspeed<br>
+• Click the 🌿/⚡ to change speed (not too much or you'll hang the browser!)<br>
+• Click ◀️/▶️ for the previous/next fractal (or press R for next)<br>
+• Use the arrow keys or angle brackets or J/L or +/- for finer-grained speed control<br>
+• (N to change everything randomly EXCEPT the number of attractors)<br>
+• (H to change everything randomly EXCEPT whether there's a hub)<br>
+• (P to change everything randomly EXCEPT the partial teleport)</p>
+  <button id="closeHelp">Close</button>
+</dialog>
 </body>
 </html>
