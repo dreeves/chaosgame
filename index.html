@@ -64,7 +64,8 @@
 <body>
 <dialog id="helpDialog" aria-labelledby="help-title">
   <h2 id="help-title">Help</h2>
-  <p>• Click the 🖌️∴🐢/🚀 to toggle hyperspeed. Hyperspeed means the screen does NOT refresh as it goes.<br>
+  <p>
+• Click the 🖌️∴🐢/🚀 to toggle hyperspeed. Hyperspeed means the screen does NOT update as it goes; it just generates the fractal in its head.<br>
 • Click the rainbow (or press 1-9) for a one-time refresh of the screen when in hyperspeed<br>
 • Click the 🌿/⚡ to change speed (not too much or you'll hang the browser!)<br>
 • Click ◀️/▶️ for the previous/next fractal (or press R for next)<br>
@@ -74,5 +75,60 @@
 • (P to change everything randomly EXCEPT the partial teleport)</p>
   <button id="closeHelp">Close</button>
 </dialog>
+
+<script defer>
+const helpDialog = document.getElementById('helpDialog');
+const closeHelp = document.getElementById('closeHelp');
+
+// Close with button
+closeHelp.onclick = (e) => {
+  e.stopPropagation();
+  e.preventDefault();
+  helpDialog.close();
+};
+
+// Close when clicking backdrop
+helpDialog.addEventListener('click', (e) => {
+  if (e.target === helpDialog) {
+    e.stopPropagation();
+    e.preventDefault();
+    helpDialog.close();
+  }
+});
+
+// Allow Esc to close
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && helpDialog.open) {
+    helpDialog.close();
+  }
+});
+
+// Prevent all events from bubbling when dialog is open
+helpDialog.addEventListener('open', () => {
+  document.body.style.pointerEvents = 'none';
+  helpDialog.style.pointerEvents = 'auto';
+});
+
+helpDialog.addEventListener('close', () => {
+  // Add a small delay before re-enabling pointer events
+  // to prevent the close click from being processed by p5.js
+  setTimeout(() => {
+    document.body.style.pointerEvents = 'auto';
+  }, 50);
+});
+
+// Open dialog when ? key is pressed (will be called from client.js)
+window.showHelpDialog = () => helpDialog.showModal();
+
+// Check if dialog is open (will be called from client.js)
+window.isHelpDialogOpen = () => helpDialog.open;
+
+
+// Open dialog when ? key is pressed (will be called from client.js)
+window.showHelpDialog = () => helpDialog.showModal();
+
+// Check if dialog is open (will be called from client.js)
+window.isHelpDialogOpen = () => helpDialog.open;
+</script>
 </body>
 </html>

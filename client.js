@@ -571,12 +571,7 @@ function setup() {
   instructions()
   rainbar() 
 
-  // Set up help dialog
-  const helpDialog = document.getElementById('helpDialog');
-  document.getElementById('closeHelp').onclick = () => helpDialog.close();
-  
-  // Optional: prevent Esc from closing if you want custom logic
-  helpDialog.addEventListener('cancel', e => e.preventDefault());
+  // Help dialog is now handled in index.html
 
   let slowerButton = createButton('🌿')
   slowerButton.position(190, 84)
@@ -615,7 +610,7 @@ function toggleHyper() {
 function keyPressed() {
   console.log(`Key pressed! keyCode=${keyCode}`)
   if (keyCode === 191) { // ? or /
-    document.getElementById('helpDialog').showModal()
+    window.showHelpDialog()
   } else if (keyCode === 32) { // space
     toggleHyper()
   } else if (keyCode === 82) { // r
@@ -662,6 +657,9 @@ function keyPressed() {
 }
 
 function mouseClicked() {
+  // Don't handle clicks if help dialog is open
+  if (window.isHelpDialogOpen && window.isHelpDialogOpen()) return;
+  
   if (document.elementFromPoint(mouseX, mouseY).tagName === 'BUTTON')
     return // do nothing if a button was clicked; those're dealt with separately
   
