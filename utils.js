@@ -1,3 +1,4 @@
+// WARNING: master copy of this is in swuzzle
 // -----------------------------------------------------------------------------
 
 // Rage = refresh page. Give the part of the URL starting with the first slash.
@@ -22,11 +23,24 @@ function getQueryParam(key, def=false) {
 // Number of digits in a number n
 function digs(n) { return ("" + n).length }
 
-// Take a number (as a number or a string) x and add the commas
-function commafy(x) {
+// Old version that only works for integers
+function commafy_integer(x) {
   x = typeof x == 'string' ? x.trim() : x.toString()  // stringify the input
   if (x.length <= 3) return x
   return commafy(x.substring(0, x.length-3)) + ',' + x.substring(x.length-3)
+}
+
+// Take a number (as a number or a string) x and add the commas
+function commafy(x) {
+  x = typeof x == 'string' ? x.trim() : x.toString()  // stringify the input  
+  const [integerPart, fractionalPart] = x.split('.')
+  const formattedInteger = integerPart.length <= 3
+    ? integerPart
+    : commafy(integerPart.substring(0, integerPart.length - 3)) + ',' + 
+        integerPart.substring(integerPart.length - 3)
+  return fractionalPart !== undefined 
+    ? formattedInteger + '.' + fractionalPart 
+    : formattedInteger
 }
 
 // Blink (blue-to-pink) returns a hue number -- blue if x is 0 up to pink if 1
@@ -34,7 +48,7 @@ function blink(x) { return mod(-.83*x+.67, 1) }
 
 // Take the tally for a pixel and the max tally for any pixel, and return its
 // hue number (0 to 1).
-function tallyhue(n, maxp) { return blink(n/maxp) }
+function tallyhue(n, maxp) { return blink(lerp2(n, 1,maxp, 0,1)) }
 
 // Make mod work the mathy way for negative numbers
 function mod(x, m) { return (x % m + m) % m }
@@ -74,7 +88,13 @@ function midpoint(a, b, x=0.5) {
 }
   
 // Linearly interpolate to return u when x=a and v when x=b
-function lscale(x, a, b, u, v) { return (b*u - a*v + (v-u)*x)/(b-a) }
+// AKA convex combination: x rescaled to be in [u,v] as x ranges from a to b.
+// Oops, P5.js has a built-in lerp that overrides this, so call this lerp2
+function lerp2(x, a,b, u,v) {
+  if (a === b) return randreal(u,v)
+  //if (Math.abs(a-b) < 1e-7) return x <= (a+b)/2 ? u : v // avoid division by 0
+  return u + (x-a)/(b-a)*(v-u)
+}
 
 // Return the element x of l for which f(x) is minimal
 function argmin(l, f) {
