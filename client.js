@@ -16,7 +16,7 @@ getQueryParam, rage, blink, tallyhue, lerp2
 // Constants, Parameters, and Global Variables
 // -----------------------------------------------------------------------------
 
-const VER = "2025.06.24-g"  // displayed super tiny on the page for debugging
+const VER = "2025.06.24-h"  // displayed super tiny on the page for debugging
 const PHI = 1.6180339887498948 // AKA the golden ratio
 const LN2 = Math.log(2) // the natural log of 2, .693ish
 const SP1 = 0.63455 // special constant for special fractal; .635 looks rightish
